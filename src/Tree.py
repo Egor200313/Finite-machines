@@ -1,10 +1,12 @@
 from src.MachineBuilder import MachineBuilder
 from src.Edge import Edge
 from src.Vertex import Vertex, union, concatenate, iteration
+import string
 
 
 class RegexParseTree:
     def __init__(self, regexp: str):
+        self.alphabet = set(list(string.printable))
         self.follow_pos = {}  # follow_pos[position] множество позиций в регулярке с которых может
         # начинаться слово приинадлежащее языку
         vertex_symbol = dict()  # сопоставляет множеству позиций одно число
@@ -86,7 +88,7 @@ class RegexParseTree:
         states_to_process.append(start)
         states_rename[start] = 0
         finals = set()  # конечные состояния
-        alphabet = set()
+        #alphabet = set()
         while states_to_process:
             state = states_to_process.pop()  # достаем очередное состояние в виде множества позиций
             for symbol, next_states in self.get_next_states(state).items():
@@ -94,21 +96,26 @@ class RegexParseTree:
                 if symbol == "#":
                     finals.add(states_rename[state])
                     continue
-                alphabet.add(symbol)
+                #alphabet.add(symbol)
                 if next_states not in states_rename.keys():  # если такой набор позиций не встречался ранее,
                     # заводим под него новое состояние
                     states_rename[next_states] = len(states_rename)
                     states_to_process.append(next_states)
-
-                edges.append(Edge(prev=states_rename[state],
-                                  next=states_rename[next_states],
-                                  symbol=symbol))
+                if symbol == '$':
+                    for let in self.alphabet:
+                        edges.append(Edge(prev=states_rename[state],
+                                          next=states_rename[next_states],
+                                          symbol=let))
+                else:
+                    edges.append(Edge(prev=states_rename[state],
+                                      next=states_rename[next_states],
+                                      symbol=symbol))
         # собираем автомат
         builder = MachineBuilder()
         builder.setStartState(0)
         builder.setFinalStates(list(finals))
         builder.setEdges(edges)
-        builder.setAlphabet(list(alphabet))
+        builder.setAlphabet(list(self.alphabet))
         machine = builder.getMachine()
         machine.delete_eps()
         machine.create_DFSM()

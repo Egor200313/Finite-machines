@@ -1,6 +1,6 @@
-from src.Tree import create_machine_with_regex
+from parsing.text_parsing import ParseText
 
 if __name__ == "__main__":
-    regex, word = input().split()
-    machine = create_machine_with_regex(regex)
-    print(machine.max_prefix(word))
+    filename = input("Enter source filename: ")
+    ParseText(filename)
+

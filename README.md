@@ -1,9 +1,25 @@
-## Задача №3.8
+## Finite State Machines
 
-#### Done:
-1. Удаление eps-переходов
-2. Построение ДКА по НКА
-3. Построение ПДКА по ДКА
-4. Построение дополнения к ПДКА
-5. Минимизация ПДКА
-6. Посторение regex
+#### Highlighting text matching regular expression
+
+How to run:
+
+Print `./main.py` in the terminal. The following message will appear:
+
+`Enter source filename:` print your text file name
+
+After that enter regex and colors
+
+
+Mind that `$` means every ascii symbol and `1` is an empty word
+
+Example:
+
+```
+Enter regex in reverse polish form and color
+th.$*. green
+ab.$*. red
+
+```
+
+To end input send empty line

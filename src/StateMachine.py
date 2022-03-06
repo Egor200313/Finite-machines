@@ -320,6 +320,8 @@ class StateMachine:
         self.set_states()
 
     def has_word(self, word: str):
+        if len(self.states) == 0:
+            return False
         self.complete_DFSM()
         go = []  # go[state][symbol] - состояние в которое переходим из state по symbol
         for state in self.states:
@@ -328,6 +330,8 @@ class StateMachine:
 
         current_state = self.start_state
         for letter in word:
+            if letter not in go[current_state].keys():
+                return False
             current_state = go[current_state][letter]
 
         if current_state in self.final_states:
